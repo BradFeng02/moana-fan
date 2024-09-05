@@ -21,6 +21,7 @@
     flex-direction: column;
     align-items: center;
     min-width: var(--min-wid);
+    padding: 0rem 1rem 5rem 1rem;
   }
 
   .heading-container {
@@ -55,6 +56,19 @@
     border-radius: .11rem;
     background-color: black;
     margin-left: calc((var(--min-vw) - 100%)/2);
+  }
+
+  /* firefox digusting.... broken...... */
+  @supports (-moz-appearance:none) {
+    main::before {
+      content: 'Moana does not like Firefox! sorry... 😢';
+      opacity: 66%;
+      font-size: 1.2rem;
+      padding: .5rem;
+    }
+    h1.center-lined {
+      visibility: hidden;
+    }
   }
 
   h2 {

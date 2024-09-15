@@ -12,3 +12,9 @@
 </nav>
 
 <slot></slot>
+
+<style>
+  :global(body) {
+    overflow-x: hidden;
+  }
+</style>

@@ -137,7 +137,7 @@
       max-width: 55rem;
     }
 
-    div {
+    > div {
       flex-grow: 1;
       text-align: center;
     }
@@ -169,12 +169,13 @@
         font-size: min(cs(7.5), 2.5rem);
       }
     }
-    #love {
-      color: lightseagreen;
-    }
-    #hate {
-      color: saddlebrown;
-    }
+  }
+
+  #love {
+    color: lightseagreen;
+  }
+  #hate {
+    color: saddlebrown;
   }
 
   h2 {

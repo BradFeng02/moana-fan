@@ -1,4 +1,6 @@
 <script lang="ts">
+  export let data;
+
   let love_votes = 12323344;
   let hate_votes = 123424;
 
@@ -8,29 +10,64 @@
 
   $: love_votes_str = num_repr(love_votes);
   $: hate_votes_str = num_repr(hate_votes);
+
+  const default_name = data.random_name;
+  let vote_name = '';
+  $: vote_name, console.log(vote_name + ' ' + !!vote_name.trim());
+
+  function vote_name_onblur() {
+    vote_name = vote_name.trim();
+  }
+
+  function vote_name_onkeydown(e: KeyboardEvent) {
+    if (!e.shiftKey && e.key === 'Enter' && e.target instanceof HTMLElement) {
+      e.target.blur();
+    }
+  }
 </script>
 
 <main>
-  <div class="heading-container">
+  <div id="heading-container">
     <!-- @TODO do we still want this underline?? -->
-    <h1 class="center-lined">Welcome&nbsp;to the&nbsp;home&nbsp;of Moana's&nbsp;#1&nbsp;FAN!!</h1>
+    <h1 id="center-lined">Welcome&nbsp;to the&nbsp;home&nbsp;of Moana's&nbsp;#1&nbsp;FAN!!</h1>
     <h1>Welcome&nbsp;to the&nbsp;home&nbsp;of Moana's&nbsp;#1&nbsp;FAN!!</h1>
   </div>
   <div id="vote-counts">
     <div id="love">
       <span class="vote-count">{love_votes_str}</span>
-      <span class="vote-name">fans!</span>
+      <span class="vote-type">fans</span>
     </div>
     <div id="hate">
       <span class="vote-count">{hate_votes_str}</span>
-      <span class="vote-name">liars</span>
+      <span class="vote-type">liars..</span>
     </div>
   </div>
-  <!-- <h2>I am a.....</h2>
-  <div class="btns-container">
-    <button class="vote-btn">Moana LOVER (yay)</button>
-    <button class="vote-btn">Moana hater.. 🤥🤥</button>  
-  </div> -->
+  <div id="voting-container">
+    <div id="vote-name-container">
+      <div id="name-row">
+        <span class="name-message" id="name-start">My name is</span>
+        <input
+          class="name-message"
+          id="name-input"
+          type="text"
+          maxlength="50"
+          spellcheck="false"
+          placeholder={default_name}
+          bind:value={vote_name}
+          on:blur={vote_name_onblur}
+          on:keydown={vote_name_onkeydown}
+        />
+        <span class="name-message in-row" id="name-end">and I am a Moana...</span>
+      </div>
+      <span class="name-message out-row" id="name-end">and I am a Moana...</span>
+    </div>
+    <div id="vote-buttons">
+      <!-- <button class="vote-btn">Moana&nbsp;LOVER&nbsp;(yay)</button>
+      <button class="vote-btn">Moana&nbsp;hater..&nbsp;🤥&#8288;🤥</button> -->
+      <button class="vote-btn">LOVER!</button>
+      <button class="vote-btn">Hater</button>
+    </div>
+  </div>
 </main>
 
 <style lang="scss">
@@ -56,7 +93,7 @@
     overflow-x: hidden;
   }
 
-  .heading-container {
+  #heading-container {
     margin: 1rem 0rem 0rem 0rem;
     position: relative;
   }
@@ -85,7 +122,7 @@
       background-color: hotpink;
     }
 
-    &.center-lined {
+    &#center-lined {
       position: relative;
       display: inline;
       pointer-events: none;
@@ -155,7 +192,7 @@
         font-size: min(cs(10), 3.5rem);
       }
     }
-    .vote-name {
+    .vote-type {
       display: block;
       font-size: min(cs(9), 3rem);
       font-weight: 600;
@@ -178,28 +215,93 @@
     color: saddlebrown;
   }
 
-  h2 {
-    text-align: center;
-    vertical-align: middle;
-    font-size: 1.7rem;
-    margin: 2.5rem 0rem 2rem 0rem;
-  }
-
-  .btns-container {
+  #voting-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0rem 2rem;
-    gap: 2rem;
+    justify-content: center;
+    margin: 0rem 0.5rem;
+  }
+
+  #vote-name-container {
+    margin: 0rem;
+    margin-bottom: min(cs(5), 2rem);
+    text-align: left;
+    width: 100%;
+  }
+
+  #name-row {
+    display: table;
+  }
+
+  #name-start {
+    display: table-cell;
+    white-space: nowrap;
+    padding-right: min(cs(2), 0.66rem);
+  }
+
+  #name-end.in-row {
+    display: table-cell;
+    white-space: nowrap;
+    padding-left: min(cs(2), 0.66rem);
+    @media #{$layout-tall} {
+      display: none;
+    }
+  }
+
+  #name-end.out-row {
+    display: none;
+    white-space: nowrap;
+    margin-top: min(cs(1), 0.4rem);
+    @media #{$layout-tall} {
+      display: block;
+    }
+  }
+
+  #name-input {
+    display: table-cell;
+    outline: none;
+    border: none;
+    box-shadow: inset 0px -0.123rem black;
+    padding: 0;
+    padding-left: min(cs(1), 0.4rem);
+    padding-right: min(cs(1), 0.4rem);
+    width: 100%;
+    max-width: 20rem;
+    // 'Handwritten' from https://modernfontstacks.com/
+    font-family: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
+    font-weight: bold;
+    &::placeholder {
+      color: #909090;
+    }
+  }
+
+  .name-message {
+    font-size: min(cs(6), 2rem);
+    line-height: normal;
+  }
+
+  #vote-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: min(cs(5), 2rem);
+    padding: 0rem;
+    width: 100%;
   }
 
   .vote-btn {
-    font-size: 3rem;
+    flex-grow: 1;
+    font-size: min(cs(7.5), 2.5rem);
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 1.5rem;
+    height: min(cs(20), 7rem);
+    max-width: min(cs(60), 21rem);
+    background-color: transparent;
+    border: 0.2rem solid black;
     cursor: pointer;
-    width: 100%;
   }
 </style>
